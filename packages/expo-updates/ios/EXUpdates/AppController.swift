@@ -41,6 +41,9 @@ public class AppController: NSObject, AppLoaderTaskDelegate, ErrorRecoveryDelega
   public static let UpdateAvailableEventName = "updateAvailable"
   public static let NoUpdateAvailableEventName = "noUpdateAvailable"
   public static let ErrorEventName = "error"
+  public static let DownloadStartEventName = "downloadStart"
+  public static let DownloadCompleteEventName = "downloadComplete"
+  public static let DownloadAssetEventName = "downloadAsset"
 
   public static let UpdateEventNotificationName = "EXUpdates_UpdateEventNotification"
   public static let CheckForUpdateNotificationName = "EXUpdates_CheckForUpdateNotification"

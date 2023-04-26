@@ -8,6 +8,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 export default function App() {
   const [updateMessage, setUpdateMessage] = React.useState('');
+  const [updateEvents, setUpdateEvents] = React.useState<string[]>([]);
   const [updateAvailable, setUpdateAvailable] = React.useState(false);
 
   // Displays a message showing whether or not the app is running
@@ -17,6 +18,20 @@ export default function App() {
     : 'This app is running an update';
 
   const checkAutomaticallyMessage = `Automatic check setting = ${Updates.checkAutomatically}`;
+
+  const pushEventType = (event: Updates.UpdateEvent) => {
+    setUpdateEvents((updateEvents) => {
+      const events = [...updateEvents];
+      if (event.type === Updates.UpdateEventType.DOWNLOAD_ASSET) {
+        events.unshift(
+          `${event.type}: ${JSON.stringify(event.assetInfo, null, 2)}`,
+        );
+      } else {
+        events.unshift(event.type);
+      }
+      return events.slice(0, 5);
+    });
+  };
 
   /**
    * Async function to manually check for an available update from EAS.
@@ -48,8 +63,14 @@ export default function App() {
   const downloadAndRunUpdate = async () => {
     setUpdateMessage('Downloading the new update...');
     await Updates.fetchUpdateAsync();
-    setUpdateMessage('Downloaded update... launching it in 2 seconds.');
-    await delay(2000);
+    let countdown = 10;
+    while (countdown > 0) {
+      setUpdateMessage(
+        `Downloaded update... launching it in ${countdown} seconds.`,
+      );
+      countdown = countdown - 1;
+      await delay(1000);
+    }
     await Updates.reloadAsync();
   };
 
@@ -60,6 +81,7 @@ export default function App() {
    * @param {} event The event to handle
    */
   const eventListener = (event: Updates.UpdateEvent) => {
+    pushEventType(event);
     if (event.type === Updates.UpdateEventType.ERROR) {
       setUpdateMessage(`Error: ${event.message}`);
     } else if (event.type === Updates.UpdateEventType.NO_UPDATE_AVAILABLE) {
@@ -85,10 +107,15 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text style={styles.titleText}>Updates JS API test</Text>
+      <Text> </Text>
       <Text>{runTypeMessage}</Text>
       <Text>{checkAutomaticallyMessage}</Text>
+      <Text> </Text>
+      <Text style={styles.titleText}>Status</Text>
       <Text style={styles.updateMessageText}>{updateMessage}</Text>
+      <Text style={styles.titleText}>Last 5 UpdateEvents received</Text>
+      <Text style={styles.updateMessageText}>{updateEvents.join('\n')}</Text>
       <Pressable style={styles.button} onPress={handleCheckButtonPress}>
         <Text style={styles.buttonText}>Check manually for updates</Text>
       </Pressable>
@@ -124,13 +151,16 @@ const styles = StyleSheet.create({
   },
   updateMessageText: {
     margin: 10,
-    height: 200,
+    height: 150,
     paddingVertical: 12,
     paddingHorizontal: 32,
     width: '90%',
     borderColor: '#4630EB',
     borderWidth: 1,
     borderRadius: 4,
+  },
+  titleText: {
+    fontWeight: 'bold',
   },
 });
 
