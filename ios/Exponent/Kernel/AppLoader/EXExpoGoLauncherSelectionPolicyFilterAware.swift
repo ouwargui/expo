@@ -1,5 +1,7 @@
 //  Copyright © 2019 650 Industries. All rights reserved.
 
+// swiftlint:disable type_name
+
 import Foundation
 import EXUpdates
 import EXManifests
