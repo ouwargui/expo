@@ -58,7 +58,7 @@ public class NewManifest: Manifest {
   }
 
   public override func expoGoSDKVersion() -> String? {
-    return expoGoConfigRootObject()?.optionalValue(forKey: "sdkVersion") ?? getSDKVersionFromRuntimeVersion()
+    return expoClientConfigRootObject()?.optionalValue(forKey: "sdkVersion") ?? getSDKVersionFromRuntimeVersion()
   }
 
   public func launchAsset() -> [String: Any] {

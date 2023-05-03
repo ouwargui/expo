@@ -49,7 +49,7 @@ class NewManifest(json: JSONObject) : Manifest(json) {
   }
 
   override fun getExpoGoSDKVersion(): String? {
-    return getExpoGoConfigRootObject()?.getString("sdkVersion") ?: getSDKVersionFromRuntimeVersion()
+    return getExpoClientConfigRootObject()?.getString("sdkVersion") ?: getSDKVersionFromRuntimeVersion()
   }
 
   @Throws(JSONException::class)
