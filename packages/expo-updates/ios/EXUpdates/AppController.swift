@@ -35,8 +35,6 @@ public protocol AppControllerDelegate: AnyObject {
 @objc(EXUpdatesAppController)
 @objcMembers
 public class AppController: NSObject, AppLoaderTaskDelegate, ErrorRecoveryDelegate {
-  private static let ErrorDomain = "EXUpdatesAppController"
-
   private static let UpdateAvailableEventName = "updateAvailable"
   private static let NoUpdateAvailableEventName = "noUpdateAvailable"
   private static let ErrorEventName = "error"
